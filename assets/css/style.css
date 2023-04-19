@@ -1,0 +1,186 @@
+:root {
+    --main-color: #d0504f;
+    --bg-ingredient-color: #3382f7;
+    --bg-appliance-color: #67daa4;
+    --bg-ustensils-color: #ee6554;
+    --bg-search-color: #e7e7e7;
+    --bg-recipe-color: #e7e7e7;
+}
+html {
+    display: flex;
+    justify-content: center;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    max-width: 1440px;
+    width: 100%;
+}
+
+.bg-ingredient {
+    background-color: var(--bg-ingredient-color);
+}
+.bg-appliance {
+    background-color: var(--bg-appliance-color);
+}
+.bg-ustensils {
+    background-color: var(--bg-ustensils-color);
+}
+.opacity-0 {
+    opacity: 0;
+}
+nav {
+    margin-top: 10px;
+    text-align: center;
+}
+.logo {
+    width: 268px;
+}
+
+h1 {
+    height: 1px;
+    width: 1px;
+}
+
+/*    BANNER SEARCH  ---------------------------------------------------*/
+.section__search {
+    padding-left: 30px;
+}
+.div__search {
+    display: flex;
+    flex-direction: row;
+}
+.div__search input {
+    background-color: var(--bg-search-color);
+    max-width: 1440px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px 10px 30px;
+    height: 49px;
+    font-size: 18px;
+    line-height: 22px;
+}
+.div__search-icon {
+    font-size: 35px;
+    position: relative;
+    top: 15px;
+    right: 60px;
+}
+.div__search-input {
+    padding: 10px;
+    border: none;
+}
+
+.div__sort {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.div__search-input {
+    padding: 20px;
+    background: transparent;
+}
+.dropdown-sort {
+    margin-right: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.dropdown-sort input::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+.dropdown-sort input[type="text"]:focus {
+    -moz-outline: none;
+    outline: none;
+    caret-color: white;
+}
+.dropdown-sort .fa-solid {
+    transform: translateX(-20px);
+    color: white;
+}
+
+.dropdown-sort:hover + .fa-solid,
+.dropdown-sort:focus + .fa-solid {
+    transform: translateX(-20px);
+    transform-origin: 50% 50%;
+    transform: rotate(180deg);
+}
+
+/*    Section RECIPES LISTING  ---------------------------------------------------*/
+.section__recipes {
+    margin: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+}
+
+.card-recipe {
+    width: 100%;
+    height: 364px;
+    background-color: var(--bg-recipe-color);
+}
+.card-container {
+    padding: 20px;
+    margin-top: -5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 142px;
+    border-radius: 0 0 5px 5px;
+}
+.card-img img {
+    width: 100%;
+    height: 178px;
+    border-radius: 5px 5px 0 0;
+}
+.card-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: -30px;
+}
+.card-title h2 {
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 400;
+}
+
+.card-container-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 12px;
+    overflow: hidden;
+    height: 130px;
+}
+.card-container-details-listIng {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 14px;
+}
+.card-title-time {
+    margin-top: 15px;
+    text-align: end;
+    font-weight: 700;
+    width: 110px;
+}
+.fa-clock {
+    margin-right: 5px;
+}
+.name_ing {
+    font-weight: 700;
+}
+.quantity_ing {
+    font-weight: 400;
+}
+
+.card-container-divDescription {
+    line-height: 12px;
+}

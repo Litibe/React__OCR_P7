@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <link href="./assets/css/style.css" rel="stylesheet" type="text/css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#D0504F" />
+  <link rel="icon" href="./assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/7008d6fa0f.js" crossorigin="anonymous" defer></script>
+  <title>Les Petits Plats</title>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="main">
+      <a href="./index.html" tabindex="0" aria-label="Lien vers la Page d'Accueil">
+        <img src="./assets/logo.png" class="logo" alt="Les Petits Plats"></a>
+      <h1 class="title_homepage opacity-0" tabindex="0">Les petits plats</h1>
+    </nav>
+    <section class="section__search">
+      <div class="div__search">
+        <input tabindex="0" type="text" id="search-recipe" name="search-recipe" placeholder="Rechercher une recette"
+          class="div__search-recipe">
+        <i class="div__search-icon fa-solid fa-magnifying-glass"></i>
+      </div>
+      <div class="div__sort">
+        <div class="dropdown-sort bg-ingredient">
+          <input tabindex="0" type="text" id="search-ingredient" name="search-ingredient" placeholder="Ingredients"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
+        </div>
+        <div class="dropdown-sort bg-appliance">
+          <input tabindex="0" type="text" id="search-appliance" name="search-appliance" placeholder="Appareils"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
+        </div>
+        <div class="dropdown-sort bg-ustensils">
+          <input tabindex="0" type="text" id="search-ustensils" name="search-ustensils" placeholder="Ustensiles"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
+        </div>
+      </div>
+      </banner>
+  </header>
+  <main id="main" tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes" role="list">
+
+  </main>
+  <script src="./scripts/models/recipe.js"></script>
+  <script src="./scripts/factories/recipe.js"></script>
+  <script src="./scripts/pages/index.js"></script>
+
+</body>
+
+</html>
