@@ -8,24 +8,10 @@ async function getDataApi() {
     }
 }
 
-const displayData = (dataReceived) => {
-    const recipesSection = document.querySelector('.section__recipes');
-    if (dataReceived.recipes === undefined) {
-        const errorTitle = document.createElement('h2');
-        errorTitle.innerText = 'Aucune donnée à afficher';
-        recipesSection.appendChild(errorTitle);
-    } else {
-        dataReceived.recipes.forEach((dataOneRecipe) => {
-            const recipe = new RecipeFactory(dataOneRecipe);
-            const recipeCardIntoDom = recipe.addCardDOM;
-            recipesSection.appendChild(recipeCardIntoDom);
-        });
-    }
-};
-
 const init = async () => {
     const dataReceived = await getDataApi();
-    displayData(dataReceived);
+    interfaceRecipe = new RecipeController(dataReceived);
+    const { launch } = interfaceRecipe;
 };
 
 init();

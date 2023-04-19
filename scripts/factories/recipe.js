@@ -51,7 +51,16 @@ class RecipeFactory {
         );
         this.recipe.ingredients.forEach((element) => {
             const newLi = document.createElement('li');
-            newLi.innerHTML = `<span class="name_ing">${element.ingredient}<span> : <span class="quantity_ing">${element.quantity} ${element.unit}</span>`;
+            let quantity = '';
+            if (element.quantity !== undefined) {
+                quantity += ' : ';
+                quantity += element.quantity;
+            }
+            if (element.unit !== undefined) {
+                quantity += ' ';
+                quantity += element.unit;
+            }
+            newLi.innerHTML = `<span class="name_ing">${element.ingredient}<span> <span class="quantity_ing">${quantity}</span>`;
             ulIngredient.appendChild(newLi);
         });
         divDetails.appendChild(ulIngredient);
