@@ -10,6 +10,10 @@ class RecipeFactory {
             'aria-label',
             `Présentation de la recette ${this.recipe.name}`,
         );
+        article.setAttribute(
+            'tabindex',
+            '0',
+        );
         // part IMG
         const img = document.createElement('img');
         img.setAttribute('src', this.recipe.img);

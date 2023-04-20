@@ -31,31 +31,27 @@
         <i class="div__search-icon fa-solid fa-magnifying-glass"></i>
       </div>
       <div class="div__sort">
-        <div class="dropdown-sort bg-ingredient">
-          <div>
-            <input tabindex="0" type="text" id="search-ingredient" name="search-ingredient" placeholder="Ingredients"
-              class="div__search-input ">
-            <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
-          </div>
+        <div class="dropdown-sort bg-ingredient" id="divIngredient">
+          <input tabindex="0" type="text" id="search-ingredient" name="search-ingredient" placeholder="Ingredients"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
           <ul id="list-search-ingredient"></ul>
         </div>
-        <div class="dropdown-sort bg-appliance">
-          <div><input tabindex="0" type="text" id="search-appliance" name="search-appliance" placeholder="Appareils"
-              class="div__search-input ">
-            <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
-          </div>
+        <div class="dropdown-sort bg-appliance" id="divAppliance">
+          <input tabindex="0" type="text" id="search-appliance" name="search-appliance" placeholder="Appareils"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
+
           <ul id="list-search-appliance"></ul>
         </div>
-        <div class="dropdown-sort bg-ustensils">
-          <div>
-            <input tabindex="0" type="text" id="search-ustensils" name="search-ustensils" placeholder="Ustensiles"
-              class="div__search-input ">
-            <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
-          </div>
+        <div class="dropdown-sort bg-ustensils" id="divUstensil">
+          <input tabindex="0" type="text" id="search-ustensils" name="search-ustensils" placeholder="Ustensiles"
+            class="div__search-input ">
+          <strong class="fa-solid fa-angle-down" aria-hidden=true></strong>
           <ul id="list-search-ustensils"></ul>
         </div>
       </div>
-      </banner>
+    </section>
   </header>
   <main id="main">
     <section tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes" role="list"></section>
