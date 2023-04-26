@@ -85,7 +85,7 @@ class RecipeController {
         });
         document.querySelector('#divUstensil').addEventListener('mouseleave', () => {
             document.querySelector('#search-ustensils').placeholder = 'Ustensiles';
-            document.querySelector('#search-ustensils').placeholder = '';
+            document.querySelector('#search-ustensils').value = '';
         });
     }
 

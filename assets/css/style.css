@@ -175,7 +175,7 @@ h1 {
 
 main {
     position: absolute;
-    top: 400px;
+    top: 330px;
     margin: 0;
     padding: 0;
     max-width: 1440px;
@@ -231,7 +231,7 @@ main {
     gap: 15px;
     font-size: 12px;
     overflow: hidden;
-    height: 130px;
+    height: 110px;
 }
 .card-container-details-listIng {
     list-style: none;
@@ -257,4 +257,95 @@ main {
 
 .card-container-divDescription {
     line-height: 12px;
+}
+
+/*   Modal RECIPE  ---------------------------------------------------*/
+#recipe_modal {
+    display: none;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    background-color: var(--main-color);
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.modal {
+    border-radius: 5px;
+    background-color: rgb(250, 250, 250, 0.8);
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 35px;
+    margin: auto;
+}
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--main-color);
+    font-size: 20px;
+}
+.btn__modal-close {
+    border: none;
+    background: transparent;
+}
+.btn__modal-close strong {
+    font-size: 50px;
+    cursor: pointer;
+    color: var(--main-color);
+    transition: all ease-in-out 300ms;
+}
+.btn__modal-close strong:hover {
+    color: white;
+}
+
+.modal-content .divImg {
+    width: fit-content;
+    text-align: center;
+}
+.modal-content img {
+    width: 50%;
+    border-radius: 5px 5px 0 0;
+    box-sizing: content-box;
+    object-fit: cover;
+    object-position: top;
+}
+.modal-content .btn_modal {
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+}
+.container-IAU {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.container-ingredient {
+    border-radius: 5px;
+    border: 3px solid var(--bg-ingredient-color);
+    padding: 10px;
+}
+
+.container-appliance {
+    border-radius: 5px;
+    border: 3px solid var(--bg-appliance-color);
+    padding: 10px;
+}
+
+.container-ustensil {
+    border-radius: 5px;
+    border: 3px solid var(--bg-ustensils-color);
+    padding: 10px;
+}
+.divTimeServing {
+    margin: 20px auto;
+    padding: 10px;
+    width: fit-content;
 }

@@ -16,7 +16,7 @@ class Recipe {
 
     get name() { return this._name; }
 
-    get servings() { return this._servings; }
+    get servings() { return `${this._servings} portions`; }
 
     get ingredients() { return this._ingredients; }
 

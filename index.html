@@ -60,12 +60,24 @@
   </header>
   <main id="main">
     <section tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes" role="list"></section>
-
   </main>
-  <script src="./scripts/controllers/recipe.js"></script>
-  <script src="./scripts/models/recipe.js"></script>
-  <script src="./scripts/factories/recipe.js"></script>
-  <script src="./scripts/pages/index.js"></script>
+  <div id="recipe_modal">
+    <div class="modal" role="dialog" aria-label="Fenetre Modale pour Affichage Recette">
+      <div class="modal-header" id="modalTitle">
+        <h2 tabindex="-3">Recette</h2>
+        <button tabindex="-3" onclick="closeModal(this)" id="btnModalClose" aria-label="Croix de fermeture"
+          class="btn__modal-close">
+          <strong class="fa-solid fa-xmark"></strong></button>
+      </div>
+      <div class="modal-content">
+      </div>
+    </div>
+    <script src="./scripts/controllers/recipe.js"></script>
+    <script src="./scripts/models/recipe.js"></script>
+    <script src="./scripts/factories/recipe.js"></script>
+    <script src="./scripts/pages/index.js"></script>
+    <script src="./scripts/pages/modalRecipe.js"></script>
+
 
 </body>
 
