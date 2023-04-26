@@ -102,6 +102,7 @@ h1 {
 
 .dropdown-sort input {
     width: 60%;
+    color: white;
 }
 .dropdown-sort ul {
     padding: 20px;
