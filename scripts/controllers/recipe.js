@@ -330,13 +330,16 @@ class RecipeController {
                     );
                 }
                 if (this._dataTagAppliances.length !== 0) {
-                    applianceDetected = false;
                     // if all TagIngredient into list Ings of Recipe
                     const allFoundedAppliance = this._dataTagAppliances.every(
                         (tagApp) => appliancesRecipe.includes(tagApp),
                     );
                     // if tagAppliance into recipe and wordDetected into recipe
-                    if (allFoundedAppliance === true && wordDetected) {
+                    if (this._wordSearchBar !== '' && wordDetected) {
+                        if (allFoundedAppliance === true) {
+                            applianceDetected = true;
+                        }
+                    } else if (allFoundedAppliance === true) {
                         applianceDetected = true;
                     }
                 }

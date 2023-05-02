@@ -1,7 +1,8 @@
 async function getDataApi() {
     try {
         const response = await fetch('./data/recipes.json');
-        return response.json();
+        const data = await response.json();
+        return data;
     } catch {
     // if not data, error page loaded
         return undefined;
@@ -11,7 +12,7 @@ async function getDataApi() {
 const init = async () => {
     const dataReceived = await getDataApi();
     interfaceRecipe = new RecipeController(dataReceived);
-    const { launch } = interfaceRecipe;
+    const open = interfaceRecipe.launch;
 };
 
 init();
