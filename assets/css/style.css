@@ -133,7 +133,6 @@ h1 {
 }
 
 .dropdown-sort input[type="text"]:focus {
-    -moz-outline: none;
     outline: none;
     caret-color: white;
 }

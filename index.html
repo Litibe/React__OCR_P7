@@ -4,10 +4,10 @@
 <head>
   <link href="./assets/css/style.css" rel="stylesheet" type="text/css">
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#D0504F" />
-  <link rel="icon" href="./assets/favicon/favicon.ico" />
-  <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#D0504F">
+  <link rel="icon" href="./assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
         <img src="./assets/logo.png" class="logo" alt="Les Petits Plats"></a>
       <h1 class="title_homepage opacity-0" tabindex="0">Les petits plats</h1>
     </nav>
-    <section class="section__search">
+    <div class="section__search">
       <div class="div__search">
         <input tabindex="0" type="text" id="search-recipe" name="search-recipe" placeholder="Rechercher une recette"
           class="div__search-recipe">
@@ -56,10 +56,10 @@
           <ul id="list-search-ustensils"></ul>
         </div>
       </div>
-    </section>
+    </div>
   </header>
   <main id="main">
-    <section tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes" role="list"></section>
+    <div tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes"></div>
   </main>
   <div id="recipe_modal">
     <div class="modal" role="dialog" aria-label="Fenetre Modale pour Affichage Recette">
@@ -72,13 +72,12 @@
       <div class="modal-content">
       </div>
     </div>
-    <script src="./scripts/controllers/recipe.js"></script>
-    <script src="./scripts/models/recipe.js"></script>
-    <script src="./scripts/factories/recipe.js"></script>
-    <script src="./scripts/pages/index.js"></script>
-    <script src="./scripts/pages/modalRecipe.js"></script>
-
-
+  </div>
+  <script src="./scripts/controllers/recipe.js"></script>
+  <script src="./scripts/models/recipe.js"></script>
+  <script src="./scripts/factories/recipe.js"></script>
+  <script src="./scripts/pages/index.js"></script>
+  <script src="./scripts/pages/modalRecipe.js"></script>
 </body>
 
 </html>
