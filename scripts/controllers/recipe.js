@@ -115,14 +115,23 @@ class RecipeController {
                         const name = e.target.innerText.toLowerCase();
                         this._dataTagIngredients.push(name);
                         const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark" aria-label="Croix de Suppression"></i>`;
                         newSpan.setAttribute('tabindex', 0);
                         newSpan.setAttribute('aria-label', name);
                         newSpan.classList.add('bg-ingredient');
                         document.querySelector('.tagIngredients').appendChild(newSpan);
-                        newSpan.addEventListener('click', (element) => {
-                            element.target.remove();
-                            const nameElementLower = element.target.innerText.toLowerCase();
+                        newSpan.addEventListener('click', (elmt) => {
+                            let nameElementLower;
+                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                nameElementLower = (
+                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
+                                );
+                                elmt.target.ownerDocument.activeElement.remove();
+                            } else {
+                                nameElementLower = elmt.target.innerText.toLowerCase();
+                                elmt.target.remove();
+                            }
+
                             this._dataTagIngredients = this._dataTagIngredients.filter(
                                 (item) => item !== nameElementLower,
                             );
@@ -147,9 +156,17 @@ class RecipeController {
                         const newSpan = document.createElement('span');
                         newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
                         newSpan.classList.add('bg-appliance');
-                        newSpan.addEventListener('click', (element) => {
-                            const nameElementLower = element.target.innerText.toLowerCase();
-                            element.target.remove();
+                        newSpan.addEventListener('click', (elmt) => {
+                            let nameElementLower;
+                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                nameElementLower = (
+                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
+                                );
+                                elmt.target.ownerDocument.activeElement.remove();
+                            } else {
+                                nameElementLower = elmt.target.innerText.toLowerCase();
+                                elmt.target.remove();
+                            }
                             this._dataTagAppliances = this._dataTagAppliances.filter(
                                 (item) => item !== nameElementLower,
                             );
@@ -175,9 +192,18 @@ class RecipeController {
                             newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
                             newSpan.classList.add('bg-appliance');
                             document.querySelector('.tagAppliances').appendChild(newSpan);
-                            newSpan.addEventListener('click', (element) => {
-                                element.target.remove();
-                                const nameElementLower = element.target.innerText.toLowerCase();
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
+                                }
                                 this._dataTagAppliances = this._dataTagAppliances.filter(
                                     (item) => item !== nameElementLower,
                                 );
@@ -204,9 +230,17 @@ class RecipeController {
                         newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
                         newSpan.classList.add('bg-ustensils');
                         document.querySelector('.tagUstensils').appendChild(newSpan);
-                        newSpan.addEventListener('click', (element) => {
-                            element.target.remove();
-                            const nameElementLower = element.target.innerText.toLowerCase();
+                        newSpan.addEventListener('click', (elmt) => {
+                            let nameElementLower;
+                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                nameElementLower = (
+                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
+                                );
+                                elmt.target.ownerDocument.activeElement.remove();
+                            } else {
+                                elmt.target.remove();
+                                nameElementLower = elmt.target.innerText.toLowerCase();
+                            }
                             this._dataTagUstensils = this._dataTagUstensils.filter(
                                 (item) => item !== nameElementLower,
                             );
@@ -247,64 +281,98 @@ class RecipeController {
             this._dataRecipesFiltered = this._dataInitial.recipes.filter((recipe) => {
                 const nameRecipe = recipe.name.toLowerCase();
                 const descriptionRecipe = recipe.description.toLowerCase();
-                // detect ingredient
                 let ingredientDetected = false;
+                let wordDetected = false;
+                // ********************** fct detect Ing ********************** //
+                const ingRecipe = [];
                 recipe.ingredients.map(
                     (ing) => {
                         const nameIng = ing.ingredient.toLowerCase();
+                        ingRecipe.push(nameIng);
+                        // detect if searchBar word into name/ing/descp Recipe
                         if (wordBar !== '') {
                             if (nameIng.includes(wordBar) || (
                                 this._dataTagIngredients.includes(nameIng))
                             ) {
-                                ingredientDetected = true;
+                                wordDetected = true;
                             }
-                        } else if (
-                            this._dataTagIngredients.length !== 0 && (
-                                this._dataTagIngredients.includes(nameIng) === true)
-                        ) {
-                            ingredientDetected = true;
                         }
                         return true;
                     },
                 );
+                // if tagIngredient
+                if (
+                    this._dataTagIngredients.length !== 0
+                ) {
+                    ingredientDetected = false;
+                    // if all TagIngredient into list Ings of Recipe
+                    const allFoundedIng = this._dataTagIngredients.every(
+                        (tagIng) => ingRecipe.includes(tagIng),
+                    );
+                    if (allFoundedIng === true) {
+                        ingredientDetected = true;
+                    }
+                }
+                // ********************** fct detect Appliance ********************** //
                 // detect appliance
                 let applianceDetected = false;
-                const nameAppliance = recipe.appliance.toLowerCase();
-                if (wordBar !== '') {
-                    if (nameAppliance.includes(wordBar) || (
-                        this._dataTagAppliances.includes(nameAppliance))
-                    ) {
+                const appliancesRecipe = [];
+                if (typeof (recipe.appliance) === 'string') {
+                    const nameAppliance = recipe.appliance.toLowerCase();
+                    appliancesRecipe.push(nameAppliance);
+                } else {
+                    recipe.appliance.map(
+                        (appliance) => {
+                            const nameAppliance = appliance.toLowerCase();
+                            appliancesRecipe.push(nameAppliance);
+                            return true;
+                        },
+                    );
+                }
+                if (this._dataTagAppliances.length !== 0) {
+                    applianceDetected = false;
+                    // if all TagIngredient into list Ings of Recipe
+                    const allFoundedAppliance = this._dataTagAppliances.every(
+                        (tagApp) => appliancesRecipe.includes(tagApp),
+                    );
+                    // if tagAppliance into recipe and wordDetected into recipe
+                    if (allFoundedAppliance === true && wordDetected) {
                         applianceDetected = true;
                     }
-                } else if (this._dataTagAppliances.length !== 0 && (
-                    this._dataTagAppliances.includes(nameAppliance) === true
-                )) {
-                    applianceDetected = true;
                 }
-                // detect ustensil
+                // ********************** fct detect Ustensils ********************** //
                 let ustensilsDetected = false;
+                const ustensilsRecipe = [];
                 recipe.ustensils.map(
                     (ustensil) => {
                         const nameUstensil = ustensil.toLowerCase();
-                        if (wordBar !== '') {
-                            if (nameUstensil.includes(wordBar) || (
-                                this._dataTagUstensils.includes(nameUstensil))
-                            ) {
-                                ustensilsDetected = true;
-                            }
-                        } else if (this._dataTagUstensils.length !== 0
-                            && (this._dataTagUstensils.includes(nameUstensil) === true
-                            )) {
-                            ustensilsDetected = true;
-                        }
+                        ustensilsRecipe.push(nameUstensil);
                         return true;
                     },
                 );
+                // if tagIngredient
+                if (
+                    this._dataTagUstensils.length !== 0
+                ) {
+                    // if all TagIngredient into list Ings of Recipe
+                    const allFoundedUstensils = this._dataTagUstensils.every(
+                        (tagUstensil) => ustensilsRecipe.includes(tagUstensil),
+                    );
+                    if (allFoundedUstensils === true) {
+                        ustensilsDetected = true;
+                    }
+                }
+                // ********************** fct integration recipe into list or not  ************* //
+
                 // if wordIntoBar in name/description/ingredients
-                if (wordBar !== '') {
+                if (wordBar !== '' && this._dataTagIngredients.length === 0 && (
+                    this._dataTagAppliances.length === 0 && (
+                        this._dataTagUstensils.length === 0))) {
                     if ((nameRecipe.includes(wordBar)
-                    ) || (descriptionRecipe.includes(wordBar)
-                    )) { return recipe; }
+                    ) || (descriptionRecipe.includes(wordBar) || (ingredientDetected === true)
+                    )) {
+                        return recipe;
+                    }
                 } else if (
                     // 3 Sort of TAG IAU
                     this._dataTagIngredients.length !== 0 && (
@@ -368,6 +436,7 @@ class RecipeController {
                         && this._dataTagUstensils.length === 0) {
                     return recipe;
                 }
+                return null;
             });
         }
 
@@ -376,7 +445,6 @@ class RecipeController {
     }
 
     get launch() {
-        console.log(`4${2}`);
         this.detectSearchWord();
         this.sortRecipe();
         return true;
