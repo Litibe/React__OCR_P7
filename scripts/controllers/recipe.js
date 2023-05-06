@@ -36,56 +36,51 @@ class RecipeController {
         });
         // btn ingredient
         this._btnIngredient.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnIngredient = e.target.value;
             } else {
                 this._wordBtnIngredient = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) { this.sortRecipe(); }
         });
         document.querySelector('#divIngredient').addEventListener('mouseenter', () => {
             document.querySelector('#search-ingredient').placeholder = 'Rechercher un Ingrédient';
         });
         document.querySelector('#divIngredient').addEventListener('mouseleave', () => {
-            document.querySelector('#search-ingredient').placeholder = 'Ingrédients';
-            document.querySelector('#search-ingredient').value = '';
+            if (document.querySelector('#search-ingredient').value === '') {
+                document.querySelector('#search-ingredient').placeholder = 'Ingrédients';
+            }
         });
         // btn appliance
         this._btnAppliance.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnAppliance = e.target.value;
             } else {
                 this._wordBtnAppliance = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) { this.sortRecipe(); }
         });
         document.querySelector('#divAppliance').addEventListener('mouseenter', () => {
             document.querySelector('#search-appliance').placeholder = 'Rechercher un Appareil';
         });
         document.querySelector('#divAppliance').addEventListener('mouseleave', () => {
-            document.querySelector('#search-appliance').placeholder = 'Appareils';
-            document.querySelector('#search-appliance').value = '';
+            if (document.querySelector('#search-appliance').value === '') {
+                document.querySelector('#search-appliance').placeholder = 'Appareils';
+            }
         });
         // btn Ustensils
         this._btnUstensils.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnUstensils = e.target.value;
             } else {
                 this._wordBtnUstensils = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) {
-                this.sortRecipe();
-            }
         });
         document.querySelector('#divUstensil').addEventListener('mouseenter', () => {
             document.querySelector('#search-ustensils').placeholder = 'Rechercher un Ustensile';
         });
         document.querySelector('#divUstensil').addEventListener('mouseleave', () => {
-            document.querySelector('#search-ustensils').placeholder = 'Ustensiles';
-            document.querySelector('#search-ustensils').value = '';
+            if (document.querySelector('#search-ustensils').value === '') {
+                document.querySelector('#search-ustensils').placeholder = 'Ustensiles';
+            }
         });
     }
 
@@ -99,7 +94,6 @@ class RecipeController {
         listAppliance.replaceChildren();
         const listUstensils = document.querySelector('#list-search-ustensils');
         listUstensils.replaceChildren();
-
         this._dataRecipesFiltered.forEach((recipe) => {
             recipe.ingredients.forEach((ing) => {
                 const ingLowerCase = ing.ingredient.toLowerCase();
@@ -113,31 +107,34 @@ class RecipeController {
                     listIngredient.appendChild(newIng);
                     newIng.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagIngredients.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark" aria-label="Croix de Suppression"></i>`;
-                        newSpan.setAttribute('tabindex', 0);
-                        newSpan.setAttribute('aria-label', name);
-                        newSpan.classList.add('bg-ingredient');
-                        document.querySelector('.tagIngredients').appendChild(newSpan);
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
-                                );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                                elmt.target.remove();
-                            }
+                        if (!this._dataTagIngredients.includes(name)) {
+                            this._dataTagIngredients.push(name);
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark" aria-label="Croix de Suppression"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
+                            newSpan.classList.add('bg-ingredient');
+                            document.querySelector('.tagIngredients').appendChild(newSpan);
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
+                                }
 
-                            this._dataTagIngredients = this._dataTagIngredients.filter(
-                                (item) => item !== nameElementLower,
-                            );
+                                this._dataTagIngredients = this._dataTagIngredients.filter(
+                                    (item) => item !== nameElementLower,
+                                );
+                                this.sortRecipe();
+                            });
                             this.sortRecipe();
-                        });
-                        this.sortRecipe();
+                        }
                     });
                     listingIngredient.push(ingLowerCase);
                 }
@@ -149,49 +146,17 @@ class RecipeController {
                 ) && applianceLowerCase.includes(this._wordBtnAppliance)) {
                     const newAppliance = document.createElement('li');
                     newAppliance.innerText = applianceLowerCase;
+
                     listAppliance.appendChild(newAppliance);
                     newAppliance.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagAppliances.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
-                        newSpan.classList.add('bg-appliance');
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
-                                );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                                elmt.target.remove();
-                            }
-                            this._dataTagAppliances = this._dataTagAppliances.filter(
-                                (item) => item !== nameElementLower,
-                            );
-                            this.sortRecipe();
-                        });
-                        document.querySelector('.tagAppliances').appendChild(newSpan);
-                        this.sortRecipe();
-                    });
-                    listingAppliance.push(applianceLowerCase);
-                }
-            } else {
-                recipe.appliance.forEach((appliance) => {
-                    const applianceLowerCase = appliance.toLowerCase();
-                    if (!(listingAppliance.includes(applianceLowerCase)
-                    ) && applianceLowerCase.includes(this._wordBtnAppliance)) {
-                        const newAppliance = document.createElement('li');
-                        newAppliance.innerText = applianceLowerCase;
-                        listAppliance.appendChild(newAppliance);
-                        newAppliance.addEventListener('click', (e) => {
-                            const name = e.target.innerText.toLowerCase();
+                        if (!this._dataTagAppliances.includes(name)) {
                             this._dataTagAppliances.push(name);
                             const newSpan = document.createElement('span');
                             newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
                             newSpan.classList.add('bg-appliance');
-                            document.querySelector('.tagAppliances').appendChild(newSpan);
                             newSpan.addEventListener('click', (elmt) => {
                                 let nameElementLower;
                                 if (elmt.target.classList.contains('fa-circle-xmark') === true) {
@@ -209,7 +174,49 @@ class RecipeController {
                                 );
                                 this.sortRecipe();
                             });
+                            document.querySelector('.tagAppliances').appendChild(newSpan);
                             this.sortRecipe();
+                        }
+                    });
+                    listingAppliance.push(applianceLowerCase);
+                }
+            } else {
+                recipe.appliance.forEach((appliance) => {
+                    const applianceLowerCase = appliance.toLowerCase();
+                    if (!(listingAppliance.includes(applianceLowerCase)
+                    ) && applianceLowerCase.includes(this._wordBtnAppliance)) {
+                        const newAppliance = document.createElement('li');
+                        newAppliance.innerText = applianceLowerCase;
+                        listAppliance.appendChild(newAppliance);
+                        newAppliance.addEventListener('click', (e) => {
+                            const name = e.target.innerText.toLowerCase();
+                            if (!this._dataTagAppliances.includes(name)) {
+                                this._dataTagAppliances.push(name);
+                                const newSpan = document.createElement('span');
+                                newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                                newSpan.setAttribute('tabindex', 0);
+                                newSpan.setAttribute('aria-label', name);
+                                newSpan.classList.add('bg-appliance');
+                                document.querySelector('.tagAppliances').appendChild(newSpan);
+                                newSpan.addEventListener('click', (elmt) => {
+                                    let nameElementLower;
+                                    if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                        nameElementLower = (
+                                            elmt.target.ownerDocument.activeElement.innerText
+                                        );
+                                        nameElementLower = nameElementLower.toLowerCase();
+                                        elmt.target.ownerDocument.activeElement.remove();
+                                    } else {
+                                        nameElementLower = elmt.target.innerText.toLowerCase();
+                                        elmt.target.remove();
+                                    }
+                                    this._dataTagAppliances = this._dataTagAppliances.filter(
+                                        (item) => item !== nameElementLower,
+                                    );
+                                    this.sortRecipe();
+                                });
+                                this.sortRecipe();
+                            }
                         });
                         listingAppliance.push(applianceLowerCase);
                     }
@@ -225,28 +232,33 @@ class RecipeController {
                     listUstensils.appendChild(newUstensil);
                     newUstensil.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagUstensils.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
-                        newSpan.classList.add('bg-ustensils');
-                        document.querySelector('.tagUstensils').appendChild(newSpan);
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
+                        if (!this._dataTagUstensils.includes(name)) {
+                            this._dataTagUstensils.push(name);
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
+                            newSpan.classList.add('bg-ustensils');
+                            document.querySelector('.tagUstensils').appendChild(newSpan);
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
+                                }
+                                this._dataTagUstensils = this._dataTagUstensils.filter(
+                                    (item) => item !== nameElementLower,
                                 );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                elmt.target.remove();
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                            }
-                            this._dataTagUstensils = this._dataTagUstensils.filter(
-                                (item) => item !== nameElementLower,
-                            );
+                                this.sortRecipe();
+                            });
                             this.sortRecipe();
-                        });
-                        this.sortRecipe();
+                        }
                     });
                     listingUstensil.push(ustensilsLowerCase);
                 }
@@ -255,12 +267,18 @@ class RecipeController {
 
         // integration DOM recipes
         const recipesSection = document.querySelector('.section__recipes');
+        const divError = document.querySelector('.msg_error');
+        divError.replaceChildren();
         recipesSection.replaceChildren();
+
         if (this._dataInitial.recipes === undefined) {
-            const divMain = document.querySelector('main');
             const errorTitle = document.createElement('h2');
             errorTitle.innerText = 'Aucune donnée chargée - contacter le support';
-            divMain.appendChild(errorTitle);
+            divError.appendChild(errorTitle);
+        } else if (this._dataRecipesFiltered.length === 0) {
+            const errorTitle = document.createElement('h2');
+            errorTitle.innerText = 'Aucune recette ne correspond à votre critère... vous pouvez chercher « tarte aux pommes », « poisson », etc.';
+            divError.appendChild(errorTitle);
         } else {
             this._dataRecipesFiltered.forEach((dataOneRecipe) => {
                 const recipe = new RecipeFactory(dataOneRecipe);
@@ -270,6 +288,7 @@ class RecipeController {
         }
     }
 
+    // Algorithm sort of recipe with filter,forEach, includes, every
     sortRecipe() {
         if (this._wordSearchBar === '' && this._dataTagIngredients.length === 0
         && this._dataTagAppliances.length === 0
@@ -283,21 +302,27 @@ class RecipeController {
                 const descriptionRecipe = recipe.description.toLowerCase();
                 let ingredientDetected = false;
                 let wordDetected = false;
+                // fct includes string
+                if ((nameRecipe.includes(wordBar)
+                ) || (descriptionRecipe.includes(wordBar)
+                )) {
+                    wordDetected = true;
+                }
                 // ********************** fct detect Ing ********************** //
                 const ingRecipe = [];
-                recipe.ingredients.map(
+                recipe.ingredients.forEach(
                     (ing) => {
                         const nameIng = ing.ingredient.toLowerCase();
                         ingRecipe.push(nameIng);
-                        // detect if searchBar word into name/ing/descp Recipe
+                        // detect if searchBar word into name ing Recipe
                         if (wordBar !== '') {
-                            if (nameIng.includes(wordBar) || (
-                                this._dataTagIngredients.includes(nameIng))
+                            // fct includes string
+                            if (nameIng.includes(wordBar)
                             ) {
                                 wordDetected = true;
+                                ingredientDetected = true;
                             }
                         }
-                        return true;
                     },
                 );
                 // if tagIngredient
@@ -317,40 +342,37 @@ class RecipeController {
                 // detect appliance
                 let applianceDetected = false;
                 const appliancesRecipe = [];
+                // if in future repice appliance is transform into list instead of string
                 if (typeof (recipe.appliance) === 'string') {
                     const nameAppliance = recipe.appliance.toLowerCase();
                     appliancesRecipe.push(nameAppliance);
                 } else {
-                    recipe.appliance.map(
+                    // only if in future appliance = array
+                    recipe.appliance.forEach(
                         (appliance) => {
                             const nameAppliance = appliance.toLowerCase();
                             appliancesRecipe.push(nameAppliance);
-                            return true;
                         },
                     );
                 }
+
                 if (this._dataTagAppliances.length !== 0) {
                     // if all TagIngredient into list Ings of Recipe
                     const allFoundedAppliance = this._dataTagAppliances.every(
                         (tagApp) => appliancesRecipe.includes(tagApp),
                     );
-                    // if tagAppliance into recipe and wordDetected into recipe
-                    if (this._wordSearchBar !== '' && wordDetected) {
-                        if (allFoundedAppliance === true) {
-                            applianceDetected = true;
-                        }
-                    } else if (allFoundedAppliance === true) {
+                    // if tagAppliance into recipe  into recipe
+                    if (allFoundedAppliance === true) {
                         applianceDetected = true;
                     }
                 }
                 // ********************** fct detect Ustensils ********************** //
                 let ustensilsDetected = false;
                 const ustensilsRecipe = [];
-                recipe.ustensils.map(
+                recipe.ustensils.forEach(
                     (ustensil) => {
                         const nameUstensil = ustensil.toLowerCase();
                         ustensilsRecipe.push(nameUstensil);
-                        return true;
                     },
                 );
                 // if tagIngredient
@@ -368,12 +390,11 @@ class RecipeController {
                 // ********************** fct integration recipe into list or not  ************* //
 
                 // if wordIntoBar in name/description/ingredients
+
                 if (wordBar !== '' && this._dataTagIngredients.length === 0 && (
                     this._dataTagAppliances.length === 0 && (
                         this._dataTagUstensils.length === 0))) {
-                    if ((nameRecipe.includes(wordBar)
-                    ) || (descriptionRecipe.includes(wordBar) || (ingredientDetected === true)
-                    )) {
+                    if (wordDetected === true) {
                         return recipe;
                     }
                 } else if (
@@ -383,13 +404,15 @@ class RecipeController {
                             this._dataTagUstensils.length !== 0))) {
                     if (ingredientDetected === true
                         && applianceDetected === true
-                            && ustensilsDetected === true) { return recipe; }
+                            && ustensilsDetected === true && wordDetected === true
+                    ) { return recipe; }
                 } else if (
                     // 2 Sort of Tag IA
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length === 0) {
-                    if (ingredientDetected === true && applianceDetected === true) {
+                    if (ingredientDetected === true && applianceDetected === true
+                        && wordDetected === true) {
                         return recipe;
                     }
                 } else if (
@@ -397,7 +420,8 @@ class RecipeController {
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (ingredientDetected === true && ustensilsDetected === true) {
+                    if (wordDetected === true && ingredientDetected === true && (
+                        ustensilsDetected === true)) {
                         return recipe;
                     }
                 } else if (
@@ -405,7 +429,8 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (applianceDetected === true && ustensilsDetected === true) {
+                    if (wordDetected === true && applianceDetected === true && (
+                        ustensilsDetected === true)) {
                         return recipe;
                     }
                 } else if (
@@ -413,7 +438,7 @@ class RecipeController {
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length === 0) {
-                    if (ingredientDetected === true) {
+                    if (wordDetected === true && ingredientDetected === true) {
                         return recipe;
                     }
                 } else if (
@@ -421,7 +446,7 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length === 0) {
-                    if (applianceDetected === true) {
+                    if (wordDetected === true && applianceDetected === true) {
                         return recipe;
                     }
                 } else if (
@@ -429,7 +454,7 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (ustensilsDetected === true) {
+                    if (wordDetected === true && ustensilsDetected === true) {
                         return recipe;
                     }
                 } else if (

@@ -181,6 +181,10 @@ main {
     width: 100%;
 }
 
+.divError h2 {
+    width: fit-content;
+    margin: auto;
+}
 /*    Section RECIPES LISTING  ---------------------------------------------------*/
 .section__recipes {
     margin: 30px;

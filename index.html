@@ -60,6 +60,7 @@
   </header>
   <main id="main">
     <div tabindex="0" aria-label="Liste de nos Recettes" class="section__recipes"></div>
+    <div class="msg_error"></div>
   </main>
   <div id="recipe_modal">
     <div class="modal" role="dialog" aria-label="Fenetre Modale pour Affichage Recette">
@@ -67,10 +68,10 @@
         <h2 tabindex="-3">Recette</h2>
         <button tabindex="-3" onclick="closeModal(this)" id="btnModalClose" aria-label="Croix de fermeture"
           class="btn__modal-close">
-          <strong class="fa-solid fa-xmark"></strong></button>
+          <strong class="fa-solid fa-xmark"></strong>
+        </button>
       </div>
-      <div class="modal-content">
-      </div>
+      <div class="modal-content"></div>
     </div>
   </div>
   <script src="./scripts/controllers/recipe.js"></script>

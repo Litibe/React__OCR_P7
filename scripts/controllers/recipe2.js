@@ -38,56 +38,51 @@ class RecipeController {
         });
         // btn ingredient
         this._btnIngredient.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnIngredient = e.target.value;
             } else {
                 this._wordBtnIngredient = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) { this.sortRecipe(); }
         });
         document.querySelector('#divIngredient').addEventListener('mouseenter', () => {
             document.querySelector('#search-ingredient').placeholder = 'Rechercher un Ingrédient';
         });
         document.querySelector('#divIngredient').addEventListener('mouseleave', () => {
-            document.querySelector('#search-ingredient').placeholder = 'Ingrédients';
-            document.querySelector('#search-ingredient').value = '';
+            if (document.querySelector('#search-ingredient').value === '') {
+                document.querySelector('#search-ingredient').placeholder = 'Ingrédients';
+            }
         });
         // btn appliance
         this._btnAppliance.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnAppliance = e.target.value;
             } else {
                 this._wordBtnAppliance = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) { this.sortRecipe(); }
         });
         document.querySelector('#divAppliance').addEventListener('mouseenter', () => {
             document.querySelector('#search-appliance').placeholder = 'Rechercher un Appareil';
         });
         document.querySelector('#divAppliance').addEventListener('mouseleave', () => {
-            document.querySelector('#search-appliance').placeholder = 'Appareils';
-            document.querySelector('#search-appliance').value = '';
+            if (document.querySelector('#search-appliance').value === '') {
+                document.querySelector('#search-appliance').placeholder = 'Appareils';
+            }
         });
         // btn Ustensils
         this._btnUstensils.addEventListener('input', (e) => {
-            const varInitial = this._wordSearchBar;
             if (e.target.selectionEnd) {
                 this._wordBtnUstensils = e.target.value;
             } else {
                 this._wordBtnUstensils = '';
             } this.sortRecipe();
-            if (varInitial !== this._wordSearchBar) {
-                this.sortRecipe();
-            }
         });
         document.querySelector('#divUstensil').addEventListener('mouseenter', () => {
             document.querySelector('#search-ustensils').placeholder = 'Rechercher un Ustensile';
         });
         document.querySelector('#divUstensil').addEventListener('mouseleave', () => {
-            document.querySelector('#search-ustensils').placeholder = 'Ustensiles';
-            document.querySelector('#search-ustensils').value = '';
+            if (document.querySelector('#search-ustensils').value === '') {
+                document.querySelector('#search-ustensils').placeholder = 'Ustensiles';
+            }
         });
     }
 
@@ -101,9 +96,8 @@ class RecipeController {
         listAppliance.replaceChildren();
         const listUstensils = document.querySelector('#list-search-ustensils');
         listUstensils.replaceChildren();
-
-        for (const recipe of this._dataRecipesFiltered) {
-            for (const ing of recipe.ingredients) {
+        this._dataRecipesFiltered.forEach((recipe) => {
+            recipe.ingredients.forEach((ing) => {
                 const ingLowerCase = ing.ingredient.toLowerCase();
                 if (!(listingIngredient.includes(ingLowerCase)
                 ) && ingLowerCase.includes(this._wordBtnIngredient)) {
@@ -115,38 +109,38 @@ class RecipeController {
                     listIngredient.appendChild(newIng);
                     newIng.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagIngredients.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark" aria-label="Croix de Suppression"></i>`;
-                        newSpan.setAttribute('tabindex', 0);
-                        newSpan.setAttribute('aria-label', name);
-                        newSpan.classList.add('bg-ingredient');
-                        document.querySelector('.tagIngredients').appendChild(newSpan);
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
-                                );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                                elmt.target.remove();
-                            }
-                            const dataTagIngredientsNew = [];
-                            for (const item of this._dataTagIngredients) {
-                                if (item !== nameElementLower) {
-                                    this._dataTagIngredientsNew.push(item);
+                        if (!this._dataTagIngredients.includes(name)) {
+                            this._dataTagIngredients.push(name);
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark" aria-label="Croix de Suppression"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
+                            newSpan.classList.add('bg-ingredient');
+                            document.querySelector('.tagIngredients').appendChild(newSpan);
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
                                 }
-                            }
-                            this._dataTagIngredients = dataTagIngredientsNew;
+
+                                this._dataTagIngredients = this._dataTagIngredients.filter(
+                                    (item) => item !== nameElementLower,
+                                );
+                                this.sortRecipe();
+                            });
                             this.sortRecipe();
-                        });
-                        this.sortRecipe();
+                        }
                     });
                     listingIngredient.push(ingLowerCase);
                 }
-            }
+            });
 
             if (typeof (recipe.appliance) === 'string') {
                 const applianceLowerCase = recipe.appliance.toLowerCase();
@@ -154,35 +148,37 @@ class RecipeController {
                 ) && applianceLowerCase.includes(this._wordBtnAppliance)) {
                     const newAppliance = document.createElement('li');
                     newAppliance.innerText = applianceLowerCase;
+
                     listAppliance.appendChild(newAppliance);
                     newAppliance.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagAppliances.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
-                        newSpan.classList.add('bg-appliance');
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
-                                );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                                elmt.target.remove();
-                            }
-                            const dataTagAppliancesNew = [];
-                            for (const item of this._dataTagAppliances) {
-                                if (item !== nameElementLower) {
-                                    dataTagAppliancesNew.push(item);
+                        if (!this._dataTagAppliances.includes(name)) {
+                            this._dataTagAppliances.push(name);
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
+                            newSpan.classList.add('bg-appliance');
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
                                 }
-                            }
-                            this._dataTagAppliances = dataTagAppliancesNew;
+                                this._dataTagAppliances = this._dataTagAppliances.filter(
+                                    (item) => item !== nameElementLower,
+                                );
+                                this.sortRecipe();
+                            });
+                            document.querySelector('.tagAppliances').appendChild(newSpan);
                             this.sortRecipe();
-                        });
-                        document.querySelector('.tagAppliances').appendChild(newSpan);
-                        this.sortRecipe();
+                        }
                     });
                     listingAppliance.push(applianceLowerCase);
                 }
@@ -196,33 +192,33 @@ class RecipeController {
                         listAppliance.appendChild(newAppliance);
                         newAppliance.addEventListener('click', (e) => {
                             const name = e.target.innerText.toLowerCase();
-                            this._dataTagAppliances.push(name);
-                            const newSpan = document.createElement('span');
-                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
-                            newSpan.classList.add('bg-appliance');
-                            document.querySelector('.tagAppliances').appendChild(newSpan);
-                            newSpan.addEventListener('click', (elmt) => {
-                                let nameElementLower;
-                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                    nameElementLower = (
-                                        elmt.target.ownerDocument.activeElement.innerText
-                                    );
-                                    nameElementLower = nameElementLower.toLowerCase();
-                                    elmt.target.ownerDocument.activeElement.remove();
-                                } else {
-                                    nameElementLower = elmt.target.innerText.toLowerCase();
-                                    elmt.target.remove();
-                                }
-                                const dataTagAppliancesNew = [];
-                                for (const item of this._dataTagAppliances) {
-                                    if (item !== nameElementLower) {
-                                        dataTagAppliancesNew.push(item);
+                            if (!this._dataTagAppliances.includes(name)) {
+                                this._dataTagAppliances.push(name);
+                                const newSpan = document.createElement('span');
+                                newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                                newSpan.setAttribute('tabindex', 0);
+                                newSpan.setAttribute('aria-label', name);
+                                newSpan.classList.add('bg-appliance');
+                                document.querySelector('.tagAppliances').appendChild(newSpan);
+                                newSpan.addEventListener('click', (elmt) => {
+                                    let nameElementLower;
+                                    if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                        nameElementLower = (
+                                            elmt.target.ownerDocument.activeElement.innerText
+                                        );
+                                        nameElementLower = nameElementLower.toLowerCase();
+                                        elmt.target.ownerDocument.activeElement.remove();
+                                    } else {
+                                        nameElementLower = elmt.target.innerText.toLowerCase();
+                                        elmt.target.remove();
                                     }
-                                }
-                                this._dataTagAppliances = dataTagAppliancesNew;
+                                    this._dataTagAppliances = this._dataTagAppliances.filter(
+                                        (item) => item !== nameElementLower,
+                                    );
+                                    this.sortRecipe();
+                                });
                                 this.sortRecipe();
-                            });
-                            this.sortRecipe();
+                            }
                         });
                         listingAppliance.push(applianceLowerCase);
                     }
@@ -238,56 +234,63 @@ class RecipeController {
                     listUstensils.appendChild(newUstensil);
                     newUstensil.addEventListener('click', (e) => {
                         const name = e.target.innerText.toLowerCase();
-                        this._dataTagUstensils.push(name);
-                        const newSpan = document.createElement('span');
-                        newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
-                        newSpan.classList.add('bg-ustensils');
-                        document.querySelector('.tagUstensils').appendChild(newSpan);
-                        newSpan.addEventListener('click', (elmt) => {
-                            let nameElementLower;
-                            if (elmt.target.classList.contains('fa-circle-xmark') === true) {
-                                nameElementLower = (
-                                    elmt.target.ownerDocument.activeElement.innerText.toLowerCase()
-                                );
-                                elmt.target.ownerDocument.activeElement.remove();
-                            } else {
-                                elmt.target.remove();
-                                nameElementLower = elmt.target.innerText.toLowerCase();
-                            }
-                            const dataTagUstensilsNew = [];
-                            // eslint-disable-next-line no-restricted-syntax
-                            for (const item of this._dataTagUstensils) {
-                                if (item !== nameElementLower) {
-                                    dataTagUstensilsNew.push(item);
+                        if (!this._dataTagUstensils.includes(name)) {
+                            this._dataTagUstensils.push(name);
+                            const newSpan = document.createElement('span');
+                            newSpan.innerHTML = `${e.target.innerText}<i class="fa-regular fa-circle-xmark"></i>`;
+                            newSpan.setAttribute('tabindex', 0);
+                            newSpan.setAttribute('aria-label', name);
+                            newSpan.classList.add('bg-ustensils');
+                            document.querySelector('.tagUstensils').appendChild(newSpan);
+                            newSpan.addEventListener('click', (elmt) => {
+                                let nameElementLower;
+                                if (elmt.target.classList.contains('fa-circle-xmark') === true) {
+                                    nameElementLower = (
+                                        elmt.target.ownerDocument.activeElement.innerText
+                                    );
+                                    nameElementLower = nameElementLower.toLowerCase();
+                                    elmt.target.ownerDocument.activeElement.remove();
+                                } else {
+                                    nameElementLower = elmt.target.innerText.toLowerCase();
+                                    elmt.target.remove();
                                 }
-                            }
-                            this._dataTagUstensils = dataTagUstensilsNew;
+                                this._dataTagUstensils = this._dataTagUstensils.filter(
+                                    (item) => item !== nameElementLower,
+                                );
+                                this.sortRecipe();
+                            });
                             this.sortRecipe();
-                        });
-                        this.sortRecipe();
+                        }
                     });
                     listingUstensil.push(ustensilsLowerCase);
                 }
             });
-        }
+        });
 
         // integration DOM recipes
         const recipesSection = document.querySelector('.section__recipes');
+        const divError = document.querySelector('.msg_error');
+        divError.replaceChildren();
         recipesSection.replaceChildren();
+
         if (this._dataInitial.recipes === undefined) {
-            const divMain = document.querySelector('main');
             const errorTitle = document.createElement('h2');
             errorTitle.innerText = 'Aucune donnée chargée - contacter le support';
-            divMain.appendChild(errorTitle);
+            divError.appendChild(errorTitle);
+        } else if (this._dataRecipesFiltered.length === 0) {
+            const errorTitle = document.createElement('h2');
+            errorTitle.innerText = 'Aucune recette ne correspond à votre critère... vous pouvez chercher « tarte aux pommes », « poisson », etc.';
+            divError.appendChild(errorTitle);
         } else {
-            for (const dataOneRecipe of this._dataRecipesFiltered) {
+            this._dataRecipesFiltered.forEach((dataOneRecipe) => {
                 const recipe = new RecipeFactory(dataOneRecipe);
                 const recipeCardIntoDom = recipe.addCardDOM;
                 recipesSection.appendChild(recipeCardIntoDom);
-            }
+            });
         }
     }
 
+    // Algorithm sort of recipe only loop for
     sortRecipe() {
         if (this._wordSearchBar === '' && this._dataTagIngredients.length === 0
         && this._dataTagAppliances.length === 0
@@ -296,26 +299,27 @@ class RecipeController {
             this._dataRecipesFiltered = this._dataInitial.recipes;
         } else {
             const wordBar = this._wordSearchBar.toLowerCase();
-            console.log(wordBar);
             this._dataRecipesFiltered = [];
-            const listingRecipes = this._dataInitial.recipes;
-            // eslint-disable-next-line guard-for-in, no-unreachable-loop
             for (const recipe of this._dataInitial.recipes) {
-                console.log(recipe);
                 const nameRecipe = recipe.name.toLowerCase();
                 const descriptionRecipe = recipe.description.toLowerCase();
                 let ingredientDetected = false;
                 let wordDetected = false;
+                // fct includes string
+                if ((nameRecipe.includes(wordBar)
+                ) || (descriptionRecipe.includes(wordBar)
+                )) {
+                    wordDetected = true;
+                }
                 // ********************** fct detect Ing ********************** //
                 const ingRecipe = [];
-                // eslint-disable-next-line no-unreachable-loop
                 for (const ing of recipe.ingredients) {
                     const nameIng = ing.ingredient.toLowerCase();
                     ingRecipe.push(nameIng);
                     // detect if searchBar word into name/ing/descp Recipe
                     if (wordBar !== '') {
-                        if (nameIng.includes(wordBar) || (
-                            this._dataTagIngredients.includes(nameIng))
+                        // fct includes string
+                        if (nameIng.includes(wordBar)
                         ) {
                             wordDetected = true;
                         }
@@ -326,12 +330,17 @@ class RecipeController {
                 if (
                     this._dataTagIngredients.length !== 0
                 ) {
-                    ingredientDetected = false;
                     // if all TagIngredient into list Ings of Recipe
-                    const allFoundedIng = this._dataTagIngredients.every(
-                        (tagIng) => ingRecipe.includes(tagIng),
-                    );
-                    if (allFoundedIng === true) {
+                    const allFoundedIng = [];
+
+                    for (const tagIng of this._dataTagIngredients) {
+                        for (const ing of ingRecipe) {
+                            if (tagIng.toLowerCase() === ing.toLowerCase()) {
+                                allFoundedIng.push(true);
+                            }
+                        }
+                    }
+                    if (allFoundedIng.length === this._dataTagIngredients.length) {
                         ingredientDetected = true;
                     }
                 }
@@ -343,7 +352,6 @@ class RecipeController {
                     const nameAppliance = recipe.appliance.toLowerCase();
                     appliancesRecipe.push(nameAppliance);
                 } else {
-                    // eslint-disable-next-line no-unreachable-loop
                     for (const appliance of recipe.appliance) {
                         const nameAppliance = appliance.toLowerCase();
                         appliancesRecipe.push(nameAppliance);
@@ -351,15 +359,17 @@ class RecipeController {
                 }
                 if (this._dataTagAppliances.length !== 0) {
                     // if all TagIngredient into list Ings of Recipe
-                    const allFoundedAppliance = this._dataTagAppliances.every(
-                        (tagApp) => appliancesRecipe.includes(tagApp),
-                    );
-                    // if tagAppliance into recipe and wordDetected into recipe
-                    if (this._wordSearchBar !== '' && wordDetected) {
-                        if (allFoundedAppliance === true) {
-                            applianceDetected = true;
+
+                    const allFoundedAppliance = [];
+
+                    for (const tagApp of this._dataTagAppliances) {
+                        for (const appliance of appliancesRecipe) {
+                            if (tagApp.toLowerCase() === appliance.toLowerCase()) {
+                                allFoundedAppliance.push(true);
+                            }
                         }
-                    } else if (allFoundedAppliance === true) {
+                    }
+                    if (allFoundedAppliance.length === this._dataTagAppliances.length) {
                         applianceDetected = true;
                     }
                 }
@@ -377,10 +387,17 @@ class RecipeController {
                     this._dataTagUstensils.length !== 0
                 ) {
                     // if all TagIngredient into list Ings of Recipe
-                    const allFoundedUstensils = this._dataTagUstensils.every(
-                        (tagUstensil) => ustensilsRecipe.includes(tagUstensil),
-                    );
-                    if (allFoundedUstensils === true) {
+
+                    const allFoundedUstensils = [];
+
+                    for (const tagUstensil of this._dataTagUstensils) {
+                        for (const ustensil of ustensilsRecipe) {
+                            if (tagUstensil.toLowerCase() === ustensil.toLowerCase()) {
+                                allFoundedUstensils.push(true);
+                            }
+                        }
+                    }
+                    if (allFoundedUstensils.length === this._dataTagUstensils.length) {
                         ustensilsDetected = true;
                     }
                 }
@@ -390,9 +407,7 @@ class RecipeController {
                 if (wordBar !== '' && this._dataTagIngredients.length === 0 && (
                     this._dataTagAppliances.length === 0 && (
                         this._dataTagUstensils.length === 0))) {
-                    if ((nameRecipe.includes(wordBar)
-                    ) || (descriptionRecipe.includes(wordBar) || (ingredientDetected === true)
-                    )) {
+                    if (wordDetected === true) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -402,7 +417,7 @@ class RecipeController {
                             this._dataTagUstensils.length !== 0))) {
                     if (ingredientDetected === true
                         && applianceDetected === true
-                            && ustensilsDetected === true) {
+                            && ustensilsDetected === true && wordDetected === true) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -410,7 +425,8 @@ class RecipeController {
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length === 0) {
-                    if (ingredientDetected === true && applianceDetected === true) {
+                    if (ingredientDetected === true && applianceDetected === true && (
+                        wordDetected === true)) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -418,7 +434,8 @@ class RecipeController {
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (ingredientDetected === true && ustensilsDetected === true) {
+                    if (ingredientDetected === true && ustensilsDetected === true && (
+                        wordDetected === true)) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -426,7 +443,8 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (applianceDetected === true && ustensilsDetected === true) {
+                    if (applianceDetected === true && ustensilsDetected === true && (
+                        wordDetected === true)) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -434,7 +452,7 @@ class RecipeController {
                     this._dataTagIngredients.length !== 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length === 0) {
-                    if (ingredientDetected === true) {
+                    if (ingredientDetected === true && wordDetected === true) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -442,7 +460,7 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length !== 0
                         && this._dataTagUstensils.length === 0) {
-                    if (applianceDetected === true) {
+                    if (applianceDetected === true && wordDetected === true) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
@@ -450,7 +468,7 @@ class RecipeController {
                     this._dataTagIngredients.length === 0
                     && this._dataTagAppliances.length === 0
                         && this._dataTagUstensils.length !== 0) {
-                    if (ustensilsDetected === true) {
+                    if (ustensilsDetected === true && wordDetected === true) {
                         this._dataRecipesFiltered.push(recipe);
                     }
                 } else if (
