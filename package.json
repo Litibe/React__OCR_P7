@@ -1,22 +1,22 @@
 {
-  "name": "react__ocr_p6-front-end-fisheye",
+  "name": "react__ocr_p7",
   "version": "1.0.0",
-  "description": "## Démarrer le projet",
+  "description": "Les Petits Plats",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Litibe/React__OCR_P6-Front-End-Fisheye.git"
+    "url": "git+https://github.com/Litibe/React__OCR_P7.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Litibe/React__OCR_P6-Front-End-Fisheye/issues"
+    "url": "https://github.com/Litibe/React__OCR_P7/issues"
   },
-  "homepage": "https://github.com/Litibe/React__OCR_P6-Front-End-Fisheye#readme",
+  "homepage": "https://github.com/Litibe/React__OCR_P7#readme",
   "devDependencies": {
     "eslint": "^8.37.0",
     "eslint-config-airbnb-base": "^15.0.0",
